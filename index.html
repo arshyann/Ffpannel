@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FF PANNEL USERNAME AND PASSWORD GENERATOR</title>
+    <!-- Firebase App (required for Firebase SDK) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
+        
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCt8OdG4C2_z-3-JY7Sz3jo90YCtlq22bU",
+            authDomain: "freefirepannel-f5e86.firebaseapp.com",
+            databaseURL: "https://freefirepannel-f5e86-default-rtdb.firebaseio.com",
+            projectId: "freefirepannel-f5e86",
+            storageBucket: "freefirepannel-f5e86.firebasestorage.app",
+            messagingSenderId: "502751088755",
+            appId: "1:502751088755:android:45b0e38da4a36ce50c5a06"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+
+        // Firebase Authentication Reference
+        const auth = getAuth(app);
+
+        // Function to generate and register a new user
+        window.generateUser = function() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const messageDiv = document.getElementById('generateMessage');
+
+            if (!username || !password) {
+                messageDiv.textContent = "Please enter both username and password.";
+                messageDiv.style.color = "red";
+                return;
+            }
+
+            // Create email by appending "@gmail.com" to the username
+            const email = username + "@gmail.com";
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Registered successfully
+                    const user = userCredential.user;
+                    messageDiv.textContent = `User generated: ${username}`; // Remove @gmail.com from message
+                    messageDiv.style.color = "green";
+                })
+                .catch((error) => {
+                    messageDiv.textContent = `Error: ${error.message}`;
+                    messageDiv.style.color = "red";
+                });
+        }
+
+        // Function to toggle password visibility
+        window.togglePassword = function() {
+            const passwordField = document.getElementById('password');
+            const passwordType = passwordField.type === "password" ? "text" : "password";
+            passwordField.type = passwordType;
+
+            // Toggle the eye icon image
+            const eyeIcon = document.getElementById('eyeIcon');
+            if (passwordType === "password") {
+                eyeIcon.src = "https://img.icons8.com/ios/452/visible.png"; // Open eye
+            } else {
+                eyeIcon.src = "https://img.icons8.com/ios/452/invisible.png"; // Closed eye
+            }
+        }
+    </script>
+
+    <style>
+        /* General body styling for a dark theme */
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #111;
+            color: #00ff00;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        /* Container for the form with dark border */
+        .container {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box; /* Ensures padding is included in width */
+        }
+
+        /* Header styling with neon green */
+        h1 {
+            font-size: 28px;
+            color: #00ff00;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        /* Styling for form inputs and labels with a terminal look */
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        /* Make label text and input aligned properly */
+        .input-group label {
+            font-size: 16px;
+            color: #00ff00;
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            transition: all 0.3s;
+            background-color: #111; /* Match input field's background */
+            padding: 0 5px;
+            pointer-events: none;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            background-color: #222;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            border-radius: 5px;
+            outline: none;
+            position: relative;
+            box-sizing: border-box; /* Include padding and borders in width */
+        }
+
+        /* Focused state for the input fields */
+        .input-group input:focus {
+            border-color: cyan; /* Change border color to cyan */
+            box-shadow: 0 0 5px cyan; /* Cyan glow effect */
+        }
+
+        /* Label moves above the input field when focused or has text */
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label {
+            top: -10px;
+            font-size: 12px;
+            color: #00ff00; /* Keep the color green instead of red */
+        }
+
+        .password-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .password-container img {
+            cursor: pointer;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #00ff00;
+            color: black;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background-color: #00cc00;
+        }
+
+        #generateMessage {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #ff0000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>FF PANNEL USERNAME AND PASSWORD GENERATOR</h1>
+
+        <div class="input-group">
+            <input type="text" id="username" placeholder=" " />
+            <label for="username">USERNAME:</label>
+        </div>
+
+        <div class="input-group password-container">
+            <input type="password" id="password" placeholder=" " />
+            <label for="password">PASSWORD:</label>
+            <img id="eyeIcon" src="https://img.icons8.com/ios/452/visible.png" alt="Show Password" onclick="togglePassword()" />
+        </div>
+
+        <button class="btn" onclick="generateUser()">GENERATE</button>
+
+        <div id="generateMessage"></div>
+    </div>
+</body>
+</html>
